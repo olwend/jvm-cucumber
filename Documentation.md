@@ -67,14 +67,40 @@ And find the cucumber plugins required:
 
 Then you can add these to your pom.xml file:
 
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit</artifactId>
-            <version>2.3.1</version>
-            <scope>test</scope>
-        </dependency>
+      <dependencies>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-java</artifactId>
+                <version>2.3.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>2.3.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20171018</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
 
-Once the above is complete you'll want to start adding feature files via a resources folder inside the src -> test -> resource folder.
+Once the above is complete you'll want to add the appropriate plugin for cucumber, going to plugins and finding cucumber for java plugin
+
+After that, you can edit the configuration for cucumber via preferences
+
+Finally, you can edit the configuration with the below options: 
+    run -> edit configurations 
+    then choose the cucumber option 
+    Main Class          = cucumber.api.cli.Main
+    Glue                = stepdefs 
+    Classpath or module = the name of your maven module
+    Program arguments   = --plugin pretty
+
+Then you can start adding feature files via a resources folder inside the src -> test -> resource folder.
 
 And we'll need to create steps via a stepdefs folder which you can add inside src -> test -> java -> stepdefs.
 
@@ -107,10 +133,19 @@ But you can also use other libraries to create requests and responses, such as A
 
     import org.apache.http.client.methods.HttpGet;
 
-In the following requests they follow the same basic pattern but with slight variations. 
+In the following requests they follow the same basic pattern but with slight variations. We'll be using HttpRequest
 
 ### Get Request: 
-    
+
+Feature file:
+
+Given I create a get request
+When I run a get request
+Then the status returns 200
+And I print the response array
+
+Step definitions:
+
 For the Get request you'll be retrieving data 
   - To do this you'll want to set up the request by specifying a couple variables
     - First, the Base Url, for example the github url is https://api.github.com/
@@ -119,7 +154,7 @@ For the Get request you'll be retrieving data
     - Finally, we can set it to build with the .build(); command, see the below example:
 
 
-    get = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users?page=2"))
+    HttpRequest get = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users?page=2"))
         .GET()
         .setHeader("User-Agent", "Java 11 Http bot")
         .build();
@@ -127,7 +162,7 @@ For the Get request you'll be retrieving data
 Then arrange the request by sending it, you can take the get variable you created in the setup section earlier.
 From that you can add the httpClient.send command and append with the response handler
 
-    response = httpClient.send(get, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = httpClient.send(get, HttpResponse.BodyHandlers.ofString());
 
 Using the above line you can then get and interpret the response, for example:
 
@@ -141,6 +176,13 @@ Finally, you can assert and print the results.
 
 ### Post Request:
 
+Feature file:
+
+Given I create a post request with table
+When I run a post request
+Then the status returns 201
+
+Step definitions:
 For the Post request you'll be creating data
 - To do this you'll want to set up the request by specifying a couple variables
     - First, the Base Url, for example the github url is https://api.github.com/
@@ -152,8 +194,8 @@ For the Post request you'll be creating data
 
     post = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users"))
         .POST(HttpRequest.BodyPublishers.ofString("{\n" +
-            "    \"name\": \"" + itemsToLoad + "\",\n" +
-            "    \"job\": \"" + itemsToLoad + "\"\n" +
+            "    \"name\": \"" + morpheus + "\",\n" +
+            "    \"job\": \"" + leader + "\"\n" +
             "}"))
         .setHeader("User-Agent", "Java 11 Http bot")
         .build();
@@ -174,6 +216,13 @@ Finally, you can assert and print the results.
 
 ### Put Request: 
 
+Feature file:
+
+Given I create a put request with table
+When I run a put request
+Then the status returns 200
+
+Step definitions:
 For the Put request you'll updating data
 - To do this you'll want to set up the request by specifying a couple variables
     - First, the Base Url, for example the github url is https://api.github.com/
@@ -207,6 +256,13 @@ Finally, you can assert and print the results.
 
 ### Delete Request: 
 
+Feature file:
+
+Given I create a delete request
+When I run a delete request
+Then the status returns 204
+
+Step definitions:
 For the Delete request you'll deleting data
 - To do this you'll want to set up the request by specifying a couple variables
     - First, the Base Url, for example the github url is https://api.github.com/
@@ -232,6 +288,12 @@ Finally, you can assert and print the results.
 
 For parsing top level objects from the response
 
+Feature file:
+
+And I print the json response 
+
+Step definitions:
+
 To do this you'll just need to grab the response body. In order to do this you'll need to make the json response handle-able by the code.
 So we'll take the earlier response.body() and pass it to a jsonObject.
 
@@ -249,6 +311,12 @@ Or we can get a specific value by getting the key value, such as status_code:
 ### Parsing the Json responses: Nested level response:
 
 To parse the nested response it will involve a similar beginning, but we'll need to dive deeper into the array. 
+
+Feature file:
+
+And I print the json array response 
+
+Step definitions:
 To do this you'll just need to grab the response body. In order to do this you'll need to make the json response handle-able by the code.
 So we'll take the earlier response.body() and pass it to a jsonObject.
 
@@ -311,6 +379,14 @@ This way we avoid repartition in the codebase.
 ## Setting up cucumber tables
 
 In your feature files there are two main ways of interpreting datatables, the first is through a list, the second is through a map. We'll be using a map but there is an example of a list in this project that we'll breifly cover.
+
+Feature file: 
+
+Given I create a "post" request with table
+| Name   | Job   |
+| <name> | <job> |
+
+Step Definitions: 
 
 The list will be the quickest with initialising a list:
 
