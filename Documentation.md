@@ -66,18 +66,19 @@ Java version: 19.0.1
 Clone this project
 _add instructions?_
 
-Then we'll want to add Cucumber and Junit via the pom.xml file. 
+Then we'll want to add Cucumber and Junit dependencies via the pom.xml file. 
 
-To do this you want to go onto the Maven repository:
+To do this go onto the Maven repository:
 ```
     https://mvnrepository.com/
-
+```
 And find the cucumber plugins required:
-
+```
     cucumber-java
     cucumber-junit
 ```
 Then you can copy and add the XML for the dependencies to your pom.xml file:
+
 ```
 <dependencies>
     <dependency>
@@ -103,7 +104,7 @@ Once the pom.xml has the new dependencies you'll then need to add the appropriat
 	![Project structure](jvm-cucumber-API.jpg)
 
 
-Then you can start adding feature files via a resources folder inside the ```src -> test -> java```folder.
+Then you can start adding feature files via a resources folder inside the ```src -> test -> java``` folder.
 
 _Explain what the feature file is e.g. the Gherkin 'driver'_
 
@@ -114,7 +115,7 @@ _Explain this is the test steps called by the feature?_
 After that, we'll need to create a ``` testRunner.java ``` file 
 in src/test 
 
-which will allow us to run the tests:
+which will allow us to run the tests from a terminal:
 ```
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -149,7 +150,7 @@ The below Http requests use Java's internal library to access modules:
 
 _* SAY something about abstraction and builder *_
 
-In the following requests they follow the same basic pattern but with slight variations. 
+The request examples follow the same basic pattern but with slight variations. 
 
 We'll be using HttpRequest for GET, POST, PUT and DELETE requests.
 
@@ -161,17 +162,17 @@ Given I create a get request
 When I run a get request
 Then the status returns 200
 And I print the response array
-
+```
 Step definitions:
 
 For the Get request you'll be retrieving data
   - To do this you'll want to set up the request by specifying a couple variables
-    - First, the Base Url, for example the github url is https://api.github.com/ but we are using reqres.
+    - First, the Base Url, for example the github url is https://api.github.com/ but we are using reqres"https://reqres.in/api/"
     - Second, the kind of request, in this example we'll be using Get
     - Third, the header, in this case we'll set the header as User Agent identifier with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
 
-
+```
     HttpRequest get = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users?page=2"))
         .GET()
         .setHeader("User-Agent", "Java 11 Http bot")
@@ -204,13 +205,13 @@ Then the status returns 201
 Step definitions:
 For the Post request you'll be creating data
 - To do this you'll want to set up the request by specifying a couple variables
-    - First, the Base Url, for example the github url is https://api.github.com/
+    - First, the Base Url, "https://reqres.in/api/"
     - Second, the kind of request, in this example we'll be using Post
     - This will also have the body of the request, in the form of a string that can be parsed to json
     - Third, the header, in this case we'll set the header as User Agent with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
 
-
+```
     post = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users"))
         .POST(HttpRequest.BodyPublishers.ofString("{\n" +
             "    \"name\": \"" + morpheus + "\",\n" +
@@ -218,7 +219,7 @@ For the Post request you'll be creating data
             "}"))
         .setHeader("User-Agent", "Java 11 Http bot")
         .build();
-
+```
 Then arrange the request by sending it, you can take the post variable you created in the setup section earlier.
 
     response = httpClient.send(post, HttpResponse.BodyHandlers.ofString());
@@ -243,9 +244,9 @@ When I run a put request
 Then the status returns 200
 ```
 Step definitions:
-For the Put request you'll updating data
+For the Put request you'll be updating data
 - To do this you'll want to set up the request by specifying a couple variables
-    - First, the Base Url, for example the github url is https://api.github.com/
+    - First, the Base Url, "https://reqres.in/api/"
     - Second, the kind of request, in this example we'll be using Put
     - This will also have the body of the request, in the form of a string that can be parsed to json
     - Third, the header, in this case we'll set the header as User Agent with a value of JavaBot
@@ -285,7 +286,7 @@ Then the status returns 204
 Step definitions:
 For the Delete request you'll deleting data
 - To do this you'll want to set up the request by specifying a couple variables
-    - First, the Base Url, we will be using "https://reqres.in/api/"
+    - First, the Base Url, "https://reqres.in/api/"
     - Second, the kind of request, in this example we'll be using Delete
     - Third, the header, in this case we'll set the header as User Agent with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
@@ -305,8 +306,6 @@ Finally, you can assert and print the results.
     assertTrue(response.statusCode(), 204) or System.out.println(String.valueOf(response.body()));
 
 ### Parsing the Json responses: Top level response:
-
-For parsing top level objects from the response
 
 Feature file:
 ```
@@ -406,7 +405,7 @@ Feature file:
 Given I create a "post" request with table
 | Name   | Job   |
 | <name> | <job> |
-
+```
 Step Definitions:
 
 The list will be the quickest with initialising a list:
@@ -428,7 +427,8 @@ Then iterating through that with
 ---
 ## Running the project
 
-The easiest way to run the tests in the project is via the UI play icons on the left menu of Feature/Scenario file. This should be straightforward with the installed plugins.
+From terminal 
+``` mvn test```
 
 ---
-_Need to explain how the cucumber datatables help to run it  a little bit more!!!_
+_Need to explain how the cucumber datatables help to run it  a little bit more!!! e.g. to allow multiple runs varying the data table inputs_
