@@ -68,14 +68,14 @@ Start a new project from the Maven template. You can use whatever options you'd 
 Then we'll want to add Cucumber via the pom.xml file. 
 
 To do this you want to go onto the Maven repository:
-
+```
     https://mvnrepository.com/
 
 And find the cucumber plugins required:
 
     cucumber-java
     cucumber-junit
-
+```
 Then you can copy and add the XML for the dependencies to your pom.xml file:
 ```
 <dependencies>
@@ -92,6 +92,7 @@ Then you can copy and add the XML for the dependencies to your pom.xml file:
     </dependency>
 </dependencies>
 ```
+
 ## Playground Start
 
 Once the pom.xml has the new dependencies you'll have the option to refresh Maven via an icon, 
@@ -117,11 +118,11 @@ Run -> Edit configurations
     Program arguments   = --plugin pretty
 ````
 
-Then you can start adding feature files via a resources folder inside the src -> test -> resource folder.
+Then you can start adding feature files via a resources folder inside the ```src -> test -> resources ```folder.
 
 _Explain what the feature file is e.g. the Gherkin 'driver'_
 
-And we'll need to create steps via a stepdefs folder which you can add inside src -> test -> java -> stepdefs.
+And we'll need to create steps via a stepdefs folder which you can add inside ```src -> test -> java -> stepdefs```.
 
 _Explain this is the test steps called by the feature?_
 
