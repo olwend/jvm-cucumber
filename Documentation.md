@@ -57,10 +57,13 @@ Then run the command:
     mvn -version
 And you should get the response showing what JDK version you have installed
 e.g.
-``` Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
+
+```bash
+Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
 Maven home: /usr/local/Cellar/maven/3.8.6/libexec
 Java version: 19.0.1 
 ```
+
 ## Project Setup
 
 Clone this project
@@ -70,13 +73,14 @@ Then we'll want to add Cucumber and Junit dependencies via the pom.xml file.
 
 To do this go onto the [Maven repository](https://mvnrepository.com/)
 and find the cucumber plugins required:
-```
+
+```bash
     cucumber-java
     cucumber-junit
 ```
 Then you can copy and add the XML for the dependencies to your pom.xml file:
 
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>io.cucumber</groupId>
@@ -98,10 +102,7 @@ Once the pom.xml has the new dependencies you'll then need to add the appropriat
 
 ### Example Project
 
-	![Project structure](jvm-cucumber-API.jpg)
-
-
-Then you can start adding feature files via a resources folder inside the ```src -> test -> java``` folder.
+You can start adding feature files via a resources folder inside the ```src -> test -> java``` folder.
 
 _Explain what the feature file is e.g. the Gherkin 'driver'_
 
@@ -114,7 +115,7 @@ in src/test
 
 which will allow us to run the tests from a terminal:
 
-```
+```java
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
@@ -154,7 +155,8 @@ The request examples follow the same basic pattern but with slight variations.
 We'll be using HttpRequest for GET, POST, PUT and DELETE requests.
 
 ### Get Request:
-```
+
+```gherkin
 Feature file:
 
 Given I create a get request
@@ -171,7 +173,7 @@ For the Get request you'll be retrieving data
     - Third, the header, in this case we'll set the header as User Agent identifier with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
 
-```
+```java
     HttpRequest get = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users?page=2"))
         .GET()
         .setHeader("User-Agent", "Java 11 Http bot")
@@ -194,13 +196,15 @@ Finally, you can assert and print the results.
     assertTrue(response.statusCode(), 200) or System.out.println(String.valueOf(response.body()));
 
 ### Post Request:
-```
+
+```gherkin
 Feature file:
 
 Given I create a post request with table
 When I run a post request
 Then the status returns 201
 ```
+
 Step definitions:
 For the Post request you'll be creating data
 - To do this you'll want to set up the request by specifying a couple variables
@@ -210,7 +214,7 @@ For the Post request you'll be creating data
     - Third, the header, in this case we'll set the header as User Agent with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
 
-```
+```java
     post = HttpRequest.newBuilder(URI.create(BASE_URL_NAME + "users"))
         .POST(HttpRequest.BodyPublishers.ofString("{\n" +
             "    \"name\": \"" + morpheus + "\",\n" +
@@ -219,6 +223,7 @@ For the Post request you'll be creating data
         .setHeader("User-Agent", "Java 11 Http bot")
         .build();
 ```
+
 Then arrange the request by sending it, you can take the post variable you created in the setup section earlier.
 
     response = httpClient.send(post, HttpResponse.BodyHandlers.ofString());
@@ -235,13 +240,15 @@ Finally, you can assert and print the results.
 
 
 ### Put Request:
-```
+
+```gherkin
 Feature file:
 
 Given I create a put request with table
 When I run a put request
 Then the status returns 200
 ```
+
 Step definitions:
 For the Put request you'll be updating data
 - To do this you'll want to set up the request by specifying a couple variables
@@ -275,13 +282,15 @@ Finally, you can assert and print the results.
     assertTrue(response.statusCode(), 200) or System.out.println(String.valueOf(response.body()));
 
 ### Delete Request:
-```
+
+```gherkin
 Feature file:
 
 Given I create a delete request
 When I run a delete request
 Then the status returns 204
 ```
+
 Step definitions:
 For the Delete request you'll deleting data
 - To do this you'll want to set up the request by specifying a couple variables
@@ -307,7 +316,8 @@ Finally, you can assert and print the results.
 ### Parsing the Json responses: Top level response:
 
 Feature file:
-```
+
+```gherkin
 And I print the json response
 ```
 Step definitions:
@@ -332,9 +342,11 @@ Or we can get a specific value by getting the key value, such as status_code:
 To parse the nested response it will involve a similar beginning, but we'll need to dive deeper into the array.
 
 Feature file:
-```
+
+```gherkin
 And I print the json array response
 ```
+
 Step definitions:
 To do this you'll just need to grab the response body. In order to do this you'll need to make the json response handle-able by the code.
 So we'll take the earlier response.body() and pass it to a jsonObject.
@@ -358,7 +370,6 @@ And print out the contents of the array as you cycle through:
 Including grabbing specific values:
 
     session = jsonArrayNestedContents.getString("value");
-
 
 ### Asserting the responses:
 
@@ -398,13 +409,15 @@ This way we avoid repartition in the codebase.
 ## Setting up cucumber tables
 
 In your feature files there are two main ways of interpreting datatables, the first is through a list, the second is through a map. We'll be using a map but there is an example of a list in this project that we'll briefly cover.
-```
+
+```gherkin
 Feature file:
 
 Given I create a "post" request with table
 | Name   | Job   |
 | <name> | <job> |
 ```
+
 Step Definitions:
 
 The list will be the quickest with initialising a list:
@@ -422,7 +435,7 @@ The map will be very similar, we'll be creating a map object:
 Then iterating through that with
 
     for (Map<String, String> columns : rows) { addItems(columns.get("argumentOne"), columns.get("argumentTwo"))) }
-```
+
 ---
 ## Running the project
 
