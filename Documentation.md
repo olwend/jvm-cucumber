@@ -103,7 +103,7 @@ Plugins and finding The 'Cucumber for Java' plugin.
 
 	![Project structure](jvm-cucumber-API.jpg)
 
-If you do not have test/resources folder troubleshoot with 
+If you do not have ```test/resource``` folder troubleshoot with 
 https://www.jetbrains.com/help/idea/testing.html#create-test-resources-root 
 
 Finally, you can edit the configuration with the Toolbar options:
@@ -118,7 +118,7 @@ Run -> Edit configurations
     Program arguments   = --plugin pretty
 ````
 
-Then you can start adding feature files via a resources folder inside the ```src -> test -> resources ```folder.
+Then you can start adding feature files via a resources folder inside the ```src -> test -> java```folder.
 
 _Explain what the feature file is e.g. the Gherkin 'driver'_
 
@@ -169,7 +169,7 @@ In the following requests they follow the same basic pattern but with slight var
 We'll be using HttpRequest for GET, POST, PUT and DELETE requests.
 
 ### Get Request:
-````
+```
 Feature file:
 
 Given I create a get request
@@ -191,7 +191,7 @@ For the Get request you'll be retrieving data
         .GET()
         .setHeader("User-Agent", "Java 11 Http bot")
         .build();
-````
+```
 
 Then to arrange the request by sending it to API endpoint, you can take the get variable you created in the setup section earlier.
 From that you can add the httpClient.send command and append with the response handler
@@ -290,7 +290,7 @@ Finally, you can assert and print the results.
     assertTrue(response.statusCode(), 200) or System.out.println(String.valueOf(response.body()));
 ```
 ### Delete Request:
-
+```
 Feature file:
 
 Given I create a delete request
@@ -310,7 +310,7 @@ For the Delete request you'll deleting data
             .DELETE()
             .setHeader("User-Agent", "Java 11 Http bot")
             .build();
-
+```
 Then arrange the request by sending it, you can take the get variable you created in the setup section earlier,
 
     response = httpClient.send(delete, HttpResponse.BodyHandlers.ofString());
@@ -318,7 +318,7 @@ Then arrange the request by sending it, you can take the get variable you create
 Finally, you can assert and print the results.
 
     assertTrue(response.statusCode(), 204) or System.out.println(String.valueOf(response.body()));
-```
+
 ### Parsing the Json responses: Top level response:
 
 For parsing top level objects from the response
@@ -342,7 +342,7 @@ From there we can print out the full response:
 Or we can get a specific value by getting the key value, such as status_code:
 
     String specificValue = jsonObject.getString("keyValue");
-
+```
 ### Parsing the Json responses: Nested level response:
 
 
@@ -385,13 +385,13 @@ For example, you can take the value per_page and make sure it's value is correct
     And the "per_page" from the response is "6"
 
 This can be done in a way that's similar to unit testing, where you compare two values:
-```
+
     assertEquals(getValueFor(jsonObject, keyValue).toString(), expectedValue);
-```
+
 ---
 ## Refactoring the HTTP requests
 
-Updating the HTTP requests to remove repeating steps. At this point we will have a couple repeating steps and it's important to refactor early and often. To fix this we'll want to do a couple of things.
+Updating the HTTP requests to remove repeating steps. At this point we will have a couple repeating steps, and it's important to refactor early and often. To fix this we'll want to do a couple of things.
 
 Create an utilities folder and in there create a Base_url file and Common_methods file. This will allow us to write a method once and call it when we need it, eliminating repetitions. You can see the examples of these files in this project.
 
