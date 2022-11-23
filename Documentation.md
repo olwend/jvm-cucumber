@@ -100,7 +100,7 @@ Plugins and finding The 'Cucumber for Java' plugin.
 
 ### Example Project
 
-	![Project structure](./jvm-cucumber-API intelliJ.jpg)
+	![Project structure](jvm-cucumber-API.jpg)
 
 If you do not have test/resources folder troubleshoot with 
 https://www.jetbrains.com/help/idea/testing.html#create-test-resources-root 
