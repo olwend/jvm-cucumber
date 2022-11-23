@@ -3,37 +3,36 @@
 ---
 ## Summary:
 
-Many modern systems use APIs to interact with a source database or application and port data into a frontend application, which powers business processes needs to meet the demands of clients. API testing is an important aspect of the overall testing suite.
+Many modern systems use APIs to interact with a source database or application and port data into a frontend application, which powers business process needs to meet the demands of clients. API testing is an important aspect of the overall testing suite.
 
 This template will introduce you to API testing with Java, Cucumber and Maven. 
 It will also teach you how to write a suite of tests in Java for an API.
-In my example I have used the Jira API, GitHub Api and another open source hosted REST populated API called Reqres.
+In my example I have used the open source hosted REST populated API called 'Reqres'.
 
 
 ---
 ## Outcomes:
 
-- Understand how to create a project using Java/Maven
-- Understand how to mock a datastore for tests
-- Understand how to test APIs with Http requests
-- Understand how to format JSON
+- Understand the structure of a Java Maven project 
+- Understand how to test APIs with Http requests & responses
+- Understand how to format and parse JSON
 - Understand how to write API tests in Java and Cucumber
 
 ---
 ## Pre-requisites
 
 Knowledge of basic Java programming
-Knowledge of APIs and Http methods  _(add quick summary to slides to give REST,endpoints etc)_
+Knowledge of APIs and Http methods  _(add quick summary to slides to give REST,endpoints etc??)_
 
 ---
 ## Support:
 
 If you have any questions about the topics in this pathway or need a helping hand with a concept or completing the validation task, reach out to:
 
-#guild-testing on Slack
+_*Playground email*_
 
 ---
-## Setting up your own project
+## Framework Setup
 
 To start creating a Maven project we'll be using Intellij, Java, Maven and Cucumber.
 
@@ -62,9 +61,9 @@ e.g.
 Maven home: /usr/local/Cellar/maven/3.8.6/libexec
 Java version: 19.0.1 
 ```
+## Project Setup
 
-
-Once those two are done we can go into intellij and start a new project from the Maven template. You can use whatever options you'd prefer for these, so long as it's a Maven Java project.
+Start a new project from the Maven template. You can use whatever options you'd prefer for these, so long as it's a Maven Java project.
 
 Then we'll want to add Cucumber via the pom.xml file. 
 
@@ -77,7 +76,7 @@ And find the cucumber plugins required:
     cucumber-java
     cucumber-junit
 
-Then you can add these dependencies to your pom.xml file:
+Then you can copy and add the XML for the dependencies to your pom.xml file:
 ```
 <dependencies>
     <dependency>
@@ -93,20 +92,21 @@ Then you can add these dependencies to your pom.xml file:
     </dependency>
 </dependencies>
 ```
-Once the above is complete you'll have the option to refresh Maven via an icon, 
-and then need to add the appropriate plugin for cucumber, by going to "Settings" (wheel icon on right) 
+## Playground Start
+
+Once the pom.xml has the new dependencies you'll have the option to refresh Maven via an icon, 
+and then need to add the appropriate IntelliJ plugin for cucumber, by going to "Settings" (wheel icon on right) 
 Plugins and finding The 'Cucumber for Java' plugin.
 
-**// is this needed??? What do you edit?** After that, you can edit the configuration for cucumber via preferences
+### Example Project
 
-_Explain folder structure - put in a screenshot of template dir structure?_
-_I found I did not have test/resources when I imported and when I set up manually. This link for troubleshooting_
-https://www.jetbrains.com/help/idea/testing.html#create-test-resources-root
+	![Project structure](./jvm-cucumber-API intelliJ.jpg)
 
-_* Are they importing from Git clone project first? Or doing this from scratch?? 
-Won't they need the files there for next step?_
+If you do not have test/resources folder troubleshoot with 
+https://www.jetbrains.com/help/idea/testing.html#create-test-resources-root 
 
 Finally, you can edit the configuration with the Toolbar options:
+
 ```
 Run -> Edit configurations
     Choose the cucumber option to open screen:
@@ -118,47 +118,54 @@ Run -> Edit configurations
 ````
 
 Then you can start adding feature files via a resources folder inside the src -> test -> resource folder.
-_Give a bit of Gherkin background?_ 
+
 _Explain what the feature file is e.g. the Gherkin 'driver'_
 
 And we'll need to create steps via a stepdefs folder which you can add inside src -> test -> java -> stepdefs.
-_Explain this is the test steps called by feature?_
-After that, we'll need to create a ``` testRunner.java ``` file _Where?_ keep referring to picture of DIR structure
+
+_Explain this is the test steps called by the feature?_
+
+After that, we'll need to create a ``` testRunner.java ``` file 
+in src/test 
 
 which will allow us to run the tests:
+```
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+import org.junit.runner.RunWith;
 
-    @RunWith(Cucumber.class)
-    @CucumberOptions(
-            features = {"src/test/resource"},
-            tags = {},
-            plugin ="json:target/jsonReports/cucumber-report.json"
+@RunWith(Cucumber.class)
+@CucumberOptions(
+features = {"src/test/resource"},
+tags = {},
+plugin ="json:target/jsonReports/cucumber-report.json"
 
-    )
+)
 
-    public class TestRunner {}
+public class TestRunner {}
+```
 
-Once done you'll have a basic template which you can start filling with tests, 
-you'll be able to see the example testRunner.java file within this project.
+Once done you'll have a basic template which you can start filling with tests. 
 
 ---
 ## Adding in HTTP requests:
 
 To start creating Http requests and parsing json responses we'll want to start with a GET request. 
-You can use any API you'd prefer, https://reqres.in/  already has data and gives free access
+We will use a generic API that conforms to REST principles and accepts a content type of JSON.
+
+https://reqres.in/  already has data and gives free access to
  GET, POST, PUT and DELETE requests.
 
-In my example I have used the Jira API, GitHub Api and another open source API called Reqres.
-A generic API that conforms to REST principles and accepts a content type of JSON.
 
 The below Http requests use Java's internal library to access modules:
 
     import java.net.http.HttpRequest;
 
-But you can also use other libraries to create requests and responses, such as Apache:
+_* SAY something about abstraction and builder *_
 
-    import org.apache.http.client.methods.HttpGet;
+In the following requests they follow the same basic pattern but with slight variations. 
 
-In the following requests they follow the same basic pattern but with slight variations. We'll be using HttpRequest
+We'll be using HttpRequest for GET, POST, PUT and DELETE requests.
 
 ### Get Request:
 ````
@@ -173,9 +180,9 @@ Step definitions:
 
 For the Get request you'll be retrieving data
   - To do this you'll want to set up the request by specifying a couple variables
-    - First, the Base Url, for example the github url is https://api.github.com/
+    - First, the Base Url, for example the github url is https://api.github.com/ but we are using reqres.
     - Second, the kind of request, in this example we'll be using Get
-    - Third, the header, in this case we'll set the header as User Agent with a value of JavaBot
+    - Third, the header, in this case we'll set the header as User Agent identifier with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
 
 
@@ -367,7 +374,7 @@ And print out the contents of the array as you cycle through:
 Including grabbing specific values:
 
     session = jsonArrayNestedContents.getString("value");
-
+```
 
 ### Asserting the responses:
 
@@ -377,7 +384,7 @@ For example, you can take the value per_page and make sure it's value is correct
     And the "per_page" from the response is "6"
 
 This can be done in a way that's similar to unit testing, where you compare two values:
-
+```
     assertEquals(getValueFor(jsonObject, keyValue).toString(), expectedValue);
 ```
 ---
@@ -406,7 +413,7 @@ This way we avoid repartition in the codebase.
 ---
 ## Setting up cucumber tables
 
-In your feature files there are two main ways of interpreting datatables, the first is through a list, the second is through a map. We'll be using a map but there is an example of a list in this project that we'll breifly cover.
+In your feature files there are two main ways of interpreting datatables, the first is through a list, the second is through a map. We'll be using a map but there is an example of a list in this project that we'll briefly cover.
 ```
 Feature file:
 
@@ -435,7 +442,7 @@ Then iterating through that with
 ---
 ## Running the project
 
-The easiest way to run the project is via the cucumber datatables. This should be straightforward with the installed plugins.
+The easiest way to run the tests in the project is via the UI play icons on the left menu of Feature/Scenario file. This should be straightforward with the installed plugins.
 
 ---
 _Need to explain how the cucumber datatables help to run it  a little bit more!!!_
