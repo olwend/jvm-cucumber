@@ -34,7 +34,7 @@ _*Playground email*_
 ---
 ## Framework Setup
 
-To start creating a Maven project we'll be using Intellij, Java, Maven and Cucumber.
+To start creating tests in this project we'll be using Vscode as editor, Java, Maven and Cucumber.
 
 To begin we'll need to make sure Java and Maven are both installed.
 
@@ -55,7 +55,7 @@ For Maven on a mac the quickest way to do it is via Homebrew, so you can just us
 Then run the command:
 
     mvn -version
-And you should get the response showing what version you have installed
+And you should get the response showing what JDK version you have installed
 e.g.
 ``` Apache Maven 3.8.6 (84538c9988a25aec085021c365c560670ad80f63)
 Maven home: /usr/local/Cellar/maven/3.8.6/libexec
@@ -63,9 +63,10 @@ Java version: 19.0.1
 ```
 ## Project Setup
 
-Start a new project from the Maven template. You can use whatever options you'd prefer for these, so long as it's a Maven Java project.
+Clone this project
+_add instructions?_
 
-Then we'll want to add Cucumber via the pom.xml file. 
+Then we'll want to add Cucumber and Junit via the pom.xml file. 
 
 To do this you want to go onto the Maven repository:
 ```
@@ -95,34 +96,18 @@ Then you can copy and add the XML for the dependencies to your pom.xml file:
 
 ## Playground Start
 
-Once the pom.xml has the new dependencies you'll have the option to refresh Maven via an icon, 
-and then need to add the appropriate IntelliJ plugin for cucumber, by going to "Settings" (wheel icon on right) 
-Plugins and finding The 'Cucumber for Java' plugin.
+Once the pom.xml has the new dependencies you'll then need to add the appropriate VsCode 'Cucumber for Java' plugin.
 
 ### Example Project
 
 	![Project structure](jvm-cucumber-API.jpg)
 
-If you do not have ```test/resource``` folder troubleshoot with 
-https://www.jetbrains.com/help/idea/testing.html#create-test-resources-root 
-
-Finally, you can edit the configuration with the Toolbar options:
-
-```
-Run -> Edit configurations
-    Choose the cucumber option to open screen:
-    
-    Main Class          = cucumber.api.cli.Main _Explain how this relates to Project name/classes_
-    Glue                = stepdefs _Explain if this is a file_
-    Classpath or module = the name of your maven module  _What is module vs. project?_ 
-    Program arguments   = --plugin pretty
-````
 
 Then you can start adding feature files via a resources folder inside the ```src -> test -> java```folder.
 
 _Explain what the feature file is e.g. the Gherkin 'driver'_
 
-And we'll need to create steps via a stepdefs folder which you can add inside ```src -> test -> java -> stepdefs```.
+And we'll need to create the steps within a folder  ```src -> test -> java -> stepdefs```.
 
 _Explain this is the test steps called by the feature?_
 
@@ -215,7 +200,7 @@ Feature file:
 Given I create a post request with table
 When I run a post request
 Then the status returns 201
-
+```
 Step definitions:
 For the Post request you'll be creating data
 - To do this you'll want to set up the request by specifying a couple variables
@@ -247,7 +232,7 @@ Can be used to get the response attributes, but we'll go into more detail in the
 Finally, you can assert and print the results.
 
     assertTrue(response.statusCode(), 201) or System.out.println(String.valueOf(response.body()));
-```
+
 
 ### Put Request:
 ```
@@ -256,7 +241,7 @@ Feature file:
 Given I create a put request with table
 When I run a put request
 Then the status returns 200
-
+```
 Step definitions:
 For the Put request you'll updating data
 - To do this you'll want to set up the request by specifying a couple variables
@@ -288,7 +273,7 @@ Can be used to get the response attributes, but we'll go into more detail in the
 Finally, you can assert and print the results.
 
     assertTrue(response.statusCode(), 200) or System.out.println(String.valueOf(response.body()));
-```
+
 ### Delete Request:
 ```
 Feature file:
@@ -296,11 +281,11 @@ Feature file:
 Given I create a delete request
 When I run a delete request
 Then the status returns 204
-
+```
 Step definitions:
 For the Delete request you'll deleting data
 - To do this you'll want to set up the request by specifying a couple variables
-    - First, the Base Url, for example the github url is https://api.github.com/
+    - First, the Base Url, we will be using "https://reqres.in/api/"
     - Second, the kind of request, in this example we'll be using Delete
     - Third, the header, in this case we'll set the header as User Agent with a value of JavaBot
     - Finally, we can set it to build with the .build(); command, see the below example:
@@ -310,7 +295,7 @@ For the Delete request you'll deleting data
             .DELETE()
             .setHeader("User-Agent", "Java 11 Http bot")
             .build();
-```
+
 Then arrange the request by sending it, you can take the get variable you created in the setup section earlier,
 
     response = httpClient.send(delete, HttpResponse.BodyHandlers.ofString());
@@ -322,11 +307,11 @@ Finally, you can assert and print the results.
 ### Parsing the Json responses: Top level response:
 
 For parsing top level objects from the response
-```
+
 Feature file:
-
+```
 And I print the json response
-
+```
 Step definitions:
 
 To do this you'll just need to grab the response body. In order to do this you'll need to make the json response handle-able by the code.
@@ -342,16 +327,16 @@ From there we can print out the full response:
 Or we can get a specific value by getting the key value, such as status_code:
 
     String specificValue = jsonObject.getString("keyValue");
-```
+
 ### Parsing the Json responses: Nested level response:
 
 
 To parse the nested response it will involve a similar beginning, but we'll need to dive deeper into the array.
-```
+
 Feature file:
-
+```
 And I print the json array response
-
+```
 Step definitions:
 To do this you'll just need to grab the response body. In order to do this you'll need to make the json response handle-able by the code.
 So we'll take the earlier response.body() and pass it to a jsonObject.
@@ -375,7 +360,7 @@ And print out the contents of the array as you cycle through:
 Including grabbing specific values:
 
     session = jsonArrayNestedContents.getString("value");
-```
+
 
 ### Asserting the responses:
 
