@@ -68,11 +68,8 @@ _add instructions?_
 
 Then we'll want to add Cucumber and Junit dependencies via the pom.xml file. 
 
-To do this go onto the Maven repository:
-```
-    https://mvnrepository.com/
-```
-And find the cucumber plugins required:
+To do this go onto the [Maven repository](https://mvnrepository.com/)
+and find the cucumber plugins required:
 ```
     cucumber-java
     cucumber-junit
@@ -116,6 +113,7 @@ After that, we'll need to create a ``` testRunner.java ``` file
 in src/test 
 
 which will allow us to run the tests from a terminal:
+
 ```
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
@@ -130,6 +128,7 @@ plugin ="json:target/jsonReports/cucumber-report.json"
 )
 
 public class TestRunner {}
+
 ```
 
 Once done you'll have a basic template which you can start filling with tests. 
